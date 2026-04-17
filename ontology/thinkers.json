@@ -1,0 +1,145 @@
+{
+  "version": "1.0.0",
+  "thinkers": [
+    {
+      "id": "marx",
+      "name": "Karl Marx",
+      "dates": "1818–1883",
+      "avatar": { "bg": "#1c1a15", "fg": "#c8a96e", "init": "MX" },
+      "profile": {
+        "base": "material",
+        "change": "rupture",
+        "nature": "variable",
+        "institution": "reflects",
+        "epistemic": "confident",
+        "method": "dialectical"
+      },
+      "characteristicMove": "inversion",
+      "premiseTargets": ["property-post-political", "abstraction-valid"],
+      "desc": "Your causal base and mechanism of change are closely aligned with Marx. He treats economic structure as foundational and believes genuine change requires organised conflict. Where he most challenges you: his claim that human nature is entirely historically produced leaves no fixed standpoint from which to critique any social arrangement — including communism itself.",
+      "shared": "Causal base (material), mechanism (rupture), institutional analysis (reflects power)",
+      "challenges": "Fixed human nature as a critical standpoint; the science of history claim (Hume's problem)",
+      "moveLegend": "Marx speaks in his own historical voice — the manuscripts, the Grundrisse, Capital. His characteristic move is the <strong>ideology critique</strong> (Ideologiekritik): exposing how a stated position naturalises the domination of one class over another, presenting contingent arrangements as necessary. The bracketed label names the move being performed."
+    },
+    {
+      "id": "aristotle",
+      "name": "Aristotle",
+      "dates": "384–322 BC",
+      "avatar": { "bg": "#f0ebe0", "fg": "#7a5a1a", "init": "AR" },
+      "profile": {
+        "base": "ideational",
+        "change": "gradual",
+        "nature": "capacity",
+        "institution": "independent",
+        "epistemic": "moderate",
+        "method": "intuitionist"
+      },
+      "characteristicMove": "extension",
+      "premiseTargets": ["abstraction-valid", "telos-fixed"],
+      "desc": "Aristotle shares your sense that improvement is gradual and that human nature has stable features — but his causal direction runs opposite to Marx's. For him the polis is not a reflection of economic power but the necessary precondition for any human good.",
+      "shared": "Fixed capacities; gradual formation; institutions as partly independent",
+      "challenges": "His telos depends on a fixed human nature; his comfort with hierarchy and exclusion",
+      "moveLegend": "Aristotle speaks in his own voice — the Ethics, the Politics, the Metaphysics. Methodical, careful, genuinely curious. His characteristic move is the <strong>teleological question</strong>: what is this arrangement for? What is the ergon of the human being, and does this allow it to be fully realised? The bracketed label names the move."
+    },
+    {
+      "id": "hobbes",
+      "name": "Thomas Hobbes",
+      "dates": "1588–1679",
+      "avatar": { "bg": "#eae6e0", "fg": "#3a3830", "init": "HB" },
+      "profile": {
+        "base": "psychological",
+        "change": "design",
+        "nature": "fixed",
+        "institution": "independent",
+        "epistemic": "confident",
+        "method": "rationalist"
+      },
+      "characteristicMove": "reduction",
+      "premiseTargets": ["norms-self-sustaining", "improvement-designable"],
+      "desc": "Hobbes shares your confidence in systematic causal analysis and treats human nature as fixed. His reductive psychology strips out everything you may think makes political life meaningful. His foreclosure of rights against the sovereign is the move most likely to conflict with your commitments.",
+      "shared": "Systematic analysis; fixed human nature; high confidence in knowable structure",
+      "challenges": "Reductive psychology; absolute sovereignty; no meaningful rights against the state",
+      "moveLegend": "Hobbes speaks in his own voice — Leviathan, De Cive. Geometric, unsparing, proceeding by definition and demonstration. His characteristic move is the <strong>reduction</strong>: every claim is tested against the irreducible facts of human motivation and the question of whether the proposed arrangement can be enforced. Without a sovereign to give them force, covenants are mere words. The bracketed label names the move."
+    },
+    {
+      "id": "hume",
+      "name": "David Hume",
+      "dates": "1711–1776",
+      "avatar": { "bg": "#eeeaf8", "fg": "#3c3489", "init": "HU" },
+      "profile": {
+        "base": "psychological",
+        "change": "gradual",
+        "nature": "fixed",
+        "institution": "independent",
+        "epistemic": "sceptical",
+        "method": "intuitionist"
+      },
+      "characteristicMove": "destabilisation",
+      "premiseTargets": ["causal-necessity", "unified-self"],
+      "desc": "Hume is your most important destabiliser regardless of where you sit. His challenge removes a load-bearing premise from almost every political theory, including yours: he argues that causal necessity is never observed — only constant conjunction. If he is right, your confidence in causal claims about society is unjustified.",
+      "shared": "Convention and habit as real social forces; gradual change as mechanism",
+      "challenges": "Your causal claims; the unified self your theory relies on; the epistemic confidence of any systematic theory",
+      "moveLegend": "Hume speaks in his own voice — the Treatise, the Enquiries. Calm, precise, attending very carefully to what is actually given in experience versus what is merely inferred by habit. His characteristic move is the <strong>epistemic press</strong>: distinguishing observed conjunction from assumed necessity. The bracketed label names the move."
+    },
+    {
+      "id": "kant",
+      "name": "Immanuel Kant",
+      "dates": "1724–1804",
+      "avatar": { "bg": "#e6f0f8", "fg": "#0c447c", "init": "KT" },
+      "profile": {
+        "base": "institutional",
+        "change": "design",
+        "nature": "capacity",
+        "institution": "independent",
+        "epistemic": "moderate",
+        "method": "rationalist"
+      },
+      "characteristicMove": "rejection",
+      "premiseTargets": ["unified-self", "abstraction-valid"],
+      "desc": "Kant grounds political obligation in reason rather than consequences or power. He shares the view that institutions can be relatively independent of economic interests — but the ground is rationalist, not empirical.",
+      "shared": "Fixed rational capacities; institutions as independent; moderate epistemic confidence",
+      "challenges": "His metaphysics of the noumenal self; whether reason alone can determine moral law",
+      "moveLegend": "Kant speaks in his own voice — the Critiques, the Groundwork. Systematic and demanding; he establishes conditions of possibility before evaluating claims. His characteristic move is the <strong>transcendental question</strong>: what must be the case a priori for this commitment to be possible at all? And can its maxim be universalised without contradiction? The bracketed label names the move."
+    },
+    {
+      "id": "rawls",
+      "name": "John Rawls",
+      "dates": "1921–2002",
+      "avatar": { "bg": "#eaf2ec", "fg": "#27500a", "init": "RL" },
+      "profile": {
+        "base": "institutional",
+        "change": "design",
+        "nature": "capacity",
+        "institution": "independent",
+        "epistemic": "moderate",
+        "method": "intuitionist"
+      },
+      "characteristicMove": "extension",
+      "premiseTargets": ["property-post-political", "abstraction-valid"],
+      "desc": "Rawls is the dominant figure in contemporary liberal political philosophy. He absorbs Kant without the metaphysics and extends Hobbes's contractual device toward distributive justice. His vulnerability: the veil of ignorance abstracts away from class position — which may itself be a class-interested move.",
+      "shared": "Institutional independence; designed frameworks; moderate confidence; reflective equilibrium",
+      "challenges": "Abstraction from material conditions; the ideology critique of the original position",
+      "moveLegend": "Rawls speaks in his own voice — A Theory of Justice, Political Liberalism. Careful, methodical, fair-minded but persistent. His characteristic move is the <strong>original position</strong>: could this principle be agreed to by persons reasoning behind a veil of ignorance, without knowledge of their class, abilities, or conception of the good? The bracketed label names the move."
+    },
+    {
+      "id": "hayek",
+      "name": "F.A. Hayek",
+      "dates": "1899–1992",
+      "avatar": { "bg": "#f4f1ec", "fg": "#444441", "init": "HK" },
+      "profile": {
+        "base": "psychological",
+        "change": "emergent",
+        "nature": "fixed",
+        "institution": "mutual",
+        "epistemic": "sceptical",
+        "method": "critical"
+      },
+      "characteristicMove": "destabilisation",
+      "premiseTargets": ["causal-necessity", "improvement-designable"],
+      "desc": "Hayek is your most likely structural opponent if you favour designed institutions or systematic social change. He turns Hume's epistemic scepticism into a political argument: the knowledge required for rational social design does not exist in any accessible form.",
+      "shared": "Epistemic humility about social complexity; scepticism of grand design",
+      "challenges": "The feasibility of planned change; the information problem for centralised institutions",
+      "moveLegend": "Hayek speaks in his own voice — The Constitution of Liberty, Law, Legislation and Liberty. Measured, precise, a careful analyst of how well-intentioned interventions destroy the conditions of free societies. His characteristic move is the <strong>knowledge problem</strong>: what knowledge is required to carry this out, who possesses it, and can it be centralised without destroying the signals it depends on? The bracketed label names the move."
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "version": "1.0.0",
+  "dimensions": [
+    {
+      "id": "base",
+      "label": "Causal base",
+      "values": ["material", "psychological", "institutional", "ideational"],
+      "display_labels": {
+        "material": "Material/productive",
+        "psychological": "Psychological",
+        "institutional": "Institutional/rational",
+        "ideational": "Ideational/cultural"
+      }
+    },
+    {
+      "id": "change",
+      "label": "Mechanism of change",
+      "values": ["rupture", "design", "gradual", "emergent"],
+      "display_labels": {
+        "rupture": "Rupture/conflict",
+        "design": "Institutional design",
+        "gradual": "Gradual formation",
+        "emergent": "Spontaneous order"
+      }
+    },
+    {
+      "id": "nature",
+      "label": "Human nature",
+      "values": ["fixed", "variable", "capacity"],
+      "display_labels": {
+        "fixed": "Fixed",
+        "variable": "Historically variable",
+        "capacity": "Fixed capacities, variable content"
+      }
+    },
+    {
+      "id": "institution",
+      "label": "Institutions vs power",
+      "values": ["reflects", "independent", "mutual", "cultural"],
+      "display_labels": {
+        "reflects": "Reflects economic power",
+        "independent": "Relatively independent",
+        "mutual": "Mutually constitutive",
+        "cultural": "Downstream of culture"
+      }
+    },
+    {
+      "id": "epistemic",
+      "label": "Epistemic confidence",
+      "values": ["confident", "moderate", "sceptical", "reject"],
+      "display_labels": {
+        "confident": "High confidence",
+        "moderate": "Moderate",
+        "sceptical": "Sceptical",
+        "reject": "Reject design frame"
+      }
+    },
+    {
+      "id": "method",
+      "label": "Method",
+      "values": ["rationalist", "intuitionist", "critical", "dialectical"],
+      "display_labels": {
+        "rationalist": "Rationalist",
+        "intuitionist": "Intuitionist",
+        "critical": "Critical/diagnostic",
+        "dialectical": "Dialectical"
+      }
+    }
+  ]
+}

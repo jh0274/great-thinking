@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "moves": [
+    {
+      "id": "destabilisation",
+      "name": "Destabilisation",
+      "definition": "Remove a load-bearing premise without replacing the framework"
+    },
+    {
+      "id": "inversion",
+      "name": "Inversion",
+      "definition": "Preserve the architecture, reverse the causal base"
+    },
+    {
+      "id": "absorption",
+      "name": "Absorption",
+      "definition": "Incorporate a prior framework as a special case"
+    },
+    {
+      "id": "rejection",
+      "name": "Rejection",
+      "definition": "Refuse a foundational premise from outside the framework"
+    },
+    {
+      "id": "extension",
+      "name": "Extension",
+      "definition": "Apply an existing framework to new terrain"
+    },
+    {
+      "id": "reduction",
+      "name": "Reduction",
+      "definition": "Collapse complex motivation to a single mechanism"
+    },
+    {
+      "id": "foreclosure",
+      "name": "Foreclosure",
+      "definition": "Build a structure that makes certain subsequent moves unavailable"
+    }
+  ]
+}

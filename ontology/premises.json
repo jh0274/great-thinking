@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "premises": [
+    {
+      "id": "norms-self-sustaining",
+      "label": "P1",
+      "statement": "Norms can hold without coercive enforcement",
+      "thinker_targets": ["hobbes"]
+    },
+    {
+      "id": "causal-necessity",
+      "label": "P2",
+      "statement": "We can observe that A causes B, not merely that A and B co-occur",
+      "thinker_targets": ["hume", "hayek"]
+    },
+    {
+      "id": "unified-self",
+      "label": "P3",
+      "statement": "There is a coherent rational agent stable enough to ground theory",
+      "thinker_targets": ["hume", "kant"]
+    },
+    {
+      "id": "property-post-political",
+      "label": "P4",
+      "statement": "Who owns what is prior to politics; politics distributes within those facts",
+      "thinker_targets": ["marx", "rawls"]
+    },
+    {
+      "id": "abstraction-valid",
+      "label": "P5",
+      "statement": "We can reason about principles by abstracting from class and interest",
+      "thinker_targets": ["marx", "aristotle", "kant", "rawls"]
+    },
+    {
+      "id": "improvement-designable",
+      "label": "P6",
+      "statement": "Correct analysis enables deliberate production of better arrangements",
+      "thinker_targets": ["hobbes", "hayek"]
+    },
+    {
+      "id": "history-directional",
+      "label": "P7",
+      "statement": "Historical development has an immanent logic that can be known",
+      "thinker_targets": []
+    },
+    {
+      "id": "telos-fixed",
+      "label": "P8",
+      "statement": "Human nature has a stable end that determines what counts as flourishing",
+      "thinker_targets": ["aristotle"]
+    }
+  ]
+}

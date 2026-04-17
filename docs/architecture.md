@@ -69,37 +69,41 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-  subgraph frontend [Frontend]
-    index["index.html"]
-
-    subgraph engine [engine/]
-      elicitation_js["elicitation.js"]
-      scorer_js["scorer.js"]
-      router_js["router.js"]
-      dialogue_js["dialogue.js"]
-      prompts_js["prompts.js"]
-    end
-
-    subgraph ui [ui/]
-      quiz_js["quiz.js"]
-      results_js["results.js"]
-      chat_js["chat.js"]
-    end
-
-    index --> elicitation_js
-    index --> scorer_js
-    index --> router_js
-    index --> dialogue_js
-    index --> prompts_js
-    index --> quiz_js
-    index --> results_js
-    index --> chat_js
+  subgraph pages [App Router Pages]
+    root["/ — app/page.tsx\nQuiz elicitation flow"]
+    results_page["/results — app/results/page.tsx\nRanked thinker cards"]
+    dialogue_page["/dialogue/[thinkerId]\nSocratic dialogue"]
   end
 
-  Anthropic["Anthropic API\nclaude-sonnet-4-20250514"]
-  dialogue_js -->|"dialogue_turn\nmulti-turn, ≤200 tok"| Anthropic
-  dialogue_js -.->|"premise_extraction (v1.1)\nsingle-shot, 5 tok"| Anthropic
+  subgraph server [Server]
+    api_route["/api/dialogue\napp/api/dialogue/route.ts\nreads ANTHROPIC_API_KEY"]
 
-  storage[("window.storage\nposition_profile\ndialogue_history_{id}\npremise_state (v1.1)")]
-  dialogue_js --> storage
+    subgraph engine [lib/engine/]
+      elicitation_ts["elicitation.ts"]
+      scorer_ts["scorer.ts"]
+      router_ts["router.ts"]
+      prompts_ts["prompts.ts"]
+    end
+
+    subgraph ontology [ontology/]
+      dim["dimensions.json"]
+      think["thinkers.json"]
+      prem["premises.json"]
+      mv["moves.json"]
+    end
+  end
+
+  root --> elicitation_ts
+  root --> scorer_ts
+  root --> router_ts
+  dialogue_page --> api_route
+  api_route --> prompts_ts
+  engine --> ontology
+
+  Anthropic["Anthropic API\nclaude-sonnet-4-20250514"]
+  api_route -->|"dialogue_turn\nmulti-turn, ≤200 tok"| Anthropic
+  api_route -.->|"premise_extraction (v1.1)\nsingle-shot, 5 tok"| Anthropic
+
+  storage[("sessionStorage (v1)\nposition_profile\ndialogue_history_{id}\n---\nserver session (v1.1)\npremise_state {P1..P8}")]
+  dialogue_page --> storage
 ```

@@ -1,7 +1,28 @@
 # docs/architecture.yaml
-# Canonical architecture state — update on every structural change, then run /context-hygiene
+# Canonical architecture state — update on every structural change, then run /checkpoint
 # Last updated: 2026-04-17
 version: "0.1.0"
+
+# ─── IMPLEMENTATION STATUS ────────────────────────────────────────────────────
+# stub = placeholder only | wip = partially implemented | done = complete
+implementation_status:
+  pages:
+    /:              stub   # elicitation flow not yet wired
+    /results:       stub   # ranking display not yet wired
+    /dialogue/[id]: stub   # chat interface not yet wired
+  api:
+    /api/dialogue:  done   # Anthropic POST, prompt builder, response serialised
+  engine:
+    elicitation.ts: done   # 6 questions with opts, reveals, dim/val
+    scorer.ts:      done   # scoreThinker + classifyThinker (Hume override)
+    router.ts:      done   # rankThinkers → sorted RankedThinker[]
+    prompts.ts:     done   # PROMPT_BUILDERS per thinker
+    types.ts:       done   # PositionProfile, Thinker, RankedThinker, etc.
+  ontology:
+    dimensions.json: done
+    thinkers.json:   done
+    premises.json:   done
+    moves.json:      done
 
 # ─── USER JOURNEY ────────────────────────────────────────────────────────────
 user_journey:
@@ -74,19 +95,45 @@ business_logic:
 
 # ─── ARCHITECTURE ─────────────────────────────────────────────────────────────
 architecture:
-  frontend:
-    shell: index.html
+  stack:
+    framework: "Next.js 15 (App Router)"
+    language: TypeScript
+    styling: Tailwind CSS
+    runtime: Node.js (Vercel edge-compatible)
+
+  routes:
+    pages:
+      - path: /
+        file: app/page.tsx
+        description: "Quiz elicitation flow"
+      - path: /results
+        file: app/results/page.tsx
+        description: "Ranked thinker cards"
+      - path: /dialogue/[thinkerId]
+        file: app/dialogue/[thinkerId]/page.tsx
+        description: "Multi-turn Socratic dialogue"
+    api:
+      - path: /api/dialogue
+        file: app/api/dialogue/route.ts
+        description: "POST — streams Anthropic response; reads ANTHROPIC_API_KEY server-side"
+
+  engine:
+    location: lib/engine/
     modules:
-      engine:
-        - elicitation.js    # question flow, position capture
-        - scorer.js         # profile → thinker scores → classification
-        - router.js         # returns ranked thinker list
-        - dialogue.js       # API call, history management, storage r/w
-        - prompts.js        # systemPromptFn per thinker
-      ui:
-        - quiz.js           # question rendering, option selection, progress
-        - results.js        # thinker card rendering
-        - chat.js           # message rendering, input handling
+      - types.ts         # shared TypeScript types: PositionProfile, Thinker, RankedThinker, etc.
+      - elicitation.ts   # question flow, position capture
+      - scorer.ts        # profile → thinker scores → classification
+      - router.ts        # returns ranked [{thinker, classification, attackVector}]
+      - prompts.ts       # systemPromptFn per thinker
+
+  ontology:
+    location: ontology/
+    files:
+      - dimensions.json
+      - thinkers.json
+      - premises.json
+      - moves.json
+    access: "imported at build time in server components / route handlers; never fetched client-side"
 
   api:
     provider: Anthropic
@@ -106,7 +153,8 @@ architecture:
         status: v1.1
 
   storage:
-    adapter: "window.storage (Claude artifact API)"
+    v1: "sessionStorage — position_profile + dialogue_history_{id}"
+    v1.1: "Server-side session (NextAuth or similar) + premise_state {P1..P8}"
     keys:
       - position_profile          # {base, change, nature, institution, epistemic, method}
       - dialogue_history_{id}     # per-thinker conversation array
