@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philosophical Interlocutor</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #f5f2eb;
+    --surface: #faf8f4;
+    --ink: #1c1a15;
+    --ink-2: #4a4740;
+    --ink-3: #8a877f;
+    --rule: #ddd9d0;
+    --accent: #2d2a22;
+    --marx-bg: #1c1a15;
+    --marx-ink: #e8e4da;
+    --marx-dim: #8a877f;
+    --marx-accent: #c8a96e;
+    --green: #2d5a3d;
+    --green-bg: #eaf2ec;
+    --red: #7a2020;
+    --red-bg: #f5eaea;
+    --amber: #7a5a1a;
+    --amber-bg: #f7f0e0;
+    --radius: 6px;
+    --serif: 'Libre Baskerville', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Layout ── */
+  .shell {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* ── Masthead ── */
+  .masthead {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .masthead-eyebrow {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+  }
+  .masthead h1 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .masthead p {
+    font-size: 13px;
+    color: var(--ink-2);
+    max-width: 460px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  /* ── Screens ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── Progress ── */
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .progress-track {
+    flex: 1;
+    height: 2px;
+    background: var(--rule);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--ink);
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+  .progress-label {
+    font-size: 11px;
+    color: var(--ink-3);
+    white-space: nowrap;
+    font-weight: 500;
+    letter-spacing: .04em;
+  }
+
+  /* ── Question card ── */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 28px 28px 24px;
+    margin-bottom: 16px;
+  }
+  .q-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 12px;
+  }
+  .q-text {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink);
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+  .q-context {
+    font-size: 12px;
+    color: var(--ink-3);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* ── Options ── */
+  .opts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .opt {
+    padding: 13px 16px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    cursor: pointer;
+    background: var(--surface);
+    transition: border-color .15s, background .15s;
+    text-align: left;
+    width: 100%;
+  }
+  .opt:hover { border-color: var(--ink-3); background: var(--bg); }
+  .opt.selected { border-color: var(--ink); background: var(--bg); }
+  .opt-label { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+  .opt-sub { font-size: 12px; color: var(--ink-2); line-height: 1.45; }
+
+  /* ── Reveal ── */
+  .reveal {
+    background: var(--surface);
+    border-left: 3px solid var(--ink);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.65;
+    display: none;
+  }
+  .reveal.show { display: block; }
+  .reveal strong { color: var(--ink); font-weight: 500; }
+
+  /* ── Buttons ── */
+  .btn {
+    padding: 9px 22px;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 20px;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all .15s;
+    letter-spacing: .02em;
+  }
+  .btn:hover { border-color: var(--ink-3); background: var(--bg); }
+  .btn.primary { background: var(--ink); color: #f5f2eb; border-color: var(--ink); }
+  .btn.primary:hover { background: #3a3830; }
+  .btn:disabled { opacity: .4; cursor: default; }
+
+  /* ── Profile box ── */
+  .profile-box {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+  }
+  .profile-title {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 14px;
+  }
+  .profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 12px;
+    gap: 12px;
+  }
+  .profile-row:last-child { border-bottom: none; }
+  .profile-dim { color: var(--ink-3); flex-shrink: 0; }
+  .profile-val { color: var(--ink); font-weight: 500; text-align: right; }
+
+  /* ── Thinker cards ── */
+  .thinker-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .tcard {
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 16px 18px;
+    background: var(--surface);
+    transition: border-color .15s;
+  }
+  .tcard:hover { border-color: var(--ink-3); }
+  .tcard-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .tcard-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+    font-family: var(--serif);
+  }
+  .tcard-name { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--ink); }
+  .tcard-dates { font-size: 11px; color: var(--ink-3); }
+  .rel-badge {
+    margin-left: auto;
+    font-size: 10px; font-weight: 500;
+    padding: 3px 9px; border-radius: 10px; border: 1px solid;
+    white-space: nowrap;
+  }
+  .rel-neighbour { background: var(--green-bg); border-color: #a8c9b4; color: var(--green); }
+  .rel-destab    { background: var(--amber-bg); border-color: #d4b87a; color: var(--amber); }
+  .rel-opponent  { background: var(--red-bg);   border-color: #c99;    color: var(--red); }
+  .tcard-body { font-size: 12px; color: var(--ink-2); line-height: 1.65; margin-bottom: 8px; }
+  .tcard-shared {
+    font-size: 11px; color: var(--ink-3); line-height: 1.55;
+    border-top: 1px solid var(--rule); padding-top: 8px; margin-top: 4px;
+  }
+  .tcard-shared strong { color: var(--ink-2); font-weight: 500; }
+
+  .engage-btn {
+    margin-top: 10px;
+    padding: 7px 16px;
+    font-size: 11px;
+    border-radius: 16px;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    font-family: var(--sans);
+    transition: all .15s;
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+  .engage-btn:hover { border-color: var(--ink-3); background: var(--bg); }
+  .engage-btn.marx-btn {
+    background: var(--marx-bg);
+    color: var(--marx-ink);
+    border-color: var(--marx-bg);
+  }
+  .engage-btn.marx-btn:hover { background: #2d2b22; }
+
+  /* ── Dialogue screen ── */
+  .dialogue-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .dialogue-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+    font-family: var(--serif);
+  }
+  .dialogue-meta { flex: 1; }
+  .dialogue-thinker { font-family: var(--serif); font-size: 17px; color: var(--ink); margin-bottom: 2px; }
+  .dialogue-subtitle { font-size: 11px; color: var(--ink-3); }
+  .dialogue-back {
+    font-size: 11px; color: var(--ink-3);
+    background: none; border: none; cursor: pointer;
+    padding: 4px 0; font-family: var(--sans);
+  }
+  .dialogue-back:hover { color: var(--ink); }
+
+  /* ── Chat ── */
+  .chat { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+  .msg { display: flex; flex-direction: column; gap: 4px; }
+  .msg-meta { font-size: 10px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; }
+  .msg-bubble {
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 90%;
+  }
+  .msg.thinker .msg-meta { color: var(--marx-dim); }
+  .msg.thinker .msg-bubble {
+    background: var(--marx-bg);
+    color: var(--marx-ink);
+    border-radius: 2px 10px 10px 10px;
+    font-family: var(--serif);
+    font-size: 13px;
+  }
+  .msg.thinker .msg-bubble .move-label {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--marx-accent);
+    border: 1px solid #4a4535;
+    padding: 1px 6px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .msg.user .msg-meta { color: var(--ink-3); text-align: right; }
+  .msg.user { align-items: flex-end; }
+  .msg.user .msg-bubble {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    border-radius: 10px 2px 10px 10px;
+  }
+
+  /* ── Typing indicator ── */
+  .typing { display: none; }
+  .typing.show { display: flex; }
+  .typing .msg-bubble { display: flex; align-items: center; gap: 5px; padding: 12px 16px; }
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--marx-dim);
+    animation: pulse 1.2s infinite;
+  }
+  .dot:nth-child(2) { animation-delay: .2s; }
+  .dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes pulse { 0%,80%,100%{opacity:.3} 40%{opacity:1} }
+
+  /* ── Input area ── */
+  .input-area {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .chat-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink);
+    resize: none;
+    outline: none;
+    line-height: 1.5;
+    min-height: 22px;
+    max-height: 120px;
+    overflow-y: auto;
+  }
+  .chat-input::placeholder { color: var(--ink-3); }
+  .send-btn {
+    padding: 6px 14px;
+    background: var(--ink);
+    color: #f5f2eb;
+    border: none;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--sans);
+    flex-shrink: 0;
+    transition: background .15s;
+  }
+  .send-btn:hover { background: #3a3830; }
+  .send-btn:disabled { opacity: .4; cursor: default; }
+
+  /* ── Move legend ── */
+  .move-legend {
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    font-size: 11px;
+    color: var(--ink-3);
+    line-height: 1.6;
+  }
+  .move-legend strong { color: var(--ink-2); font-weight: 500; }
+
+  /* ── Session info ── */
+  .session-info {
+    font-size: 11px;
+    color: var(--ink-3);
+    text-align: center;
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  /* ── Utilities ── */
+  .mt8 { margin-top: 8px; }
+  .mt16 { margin-top: 16px; }
+  .row { display: flex; gap: 8px; align-items: center; }
+  .spacer { flex: 1; }
+  hr.rule { border: none; border-top: 1px solid var(--rule); margin: 20px 0; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Masthead -->
+  <div class="masthead">
+    <div class="masthead-eyebrow">Philosophical Interlocutor</div>
+    <h1>What do you actually believe?</h1>
+    <p>Six questions to surface your world model. Then the thinkers who share it, oppose it, and would pull the ground from under it — and the chance to be questioned by one of them.</p>
+  </div>
+
+  <!-- ── SCREEN 1: ELICITATION ── -->
+  <div class="screen active" id="screen-quiz">
+    <div class="progress">
+      <div class="progress-track"><div class="progress-fill" id="prog"></div></div>
+      <div class="progress-label" id="prog-label">1 / 6</div>
+    </div>
+    <div class="q-card">
+      <div class="q-label" id="q-label">Question 1</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-context" id="q-context"></div>
+    </div>
+    <div class="opts" id="opts"></div>
+    <div class="reveal" id="reveal"></div>
+    <div class="row mt8">
+      <div class="spacer"></div>
+      <button class="btn primary" id="next-btn" disabled onclick="nextQ()">Next →</button>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 2: RESULTS ── -->
+  <div class="screen" id="screen-results">
+    <div class="profile-box" id="profile-box"></div>
+    <div id="results-intro" style="font-size:13px;color:var(--ink-2);line-height:1.7;margin-bottom:20px"></div>
+    <div class="thinker-grid" id="thinker-grid"></div>
+    <div class="row mt16">
+      <button class="btn" onclick="restart()">Start again</button>
+    </div>
+  </div>
+
+  <!-- ── SCREEN 3: DIALOGUE ── -->
+  <div class="screen" id="screen-dialogue">
+    <div class="dialogue-header">
+      <div class="dialogue-avatar" id="d-avatar"></div>
+      <div class="dialogue-meta">
+        <div class="dialogue-thinker" id="d-name"></div>
+        <div class="dialogue-subtitle" id="d-subtitle"></div>
+      </div>
+      <button class="dialogue-back" onclick="goBack()">← Back</button>
+    </div>
+    <div class="move-legend" id="move-legend"></div>
+    <div class="chat" id="chat"></div>
+    <div class="msg thinker typing" id="typing">
+      <div class="msg-meta" id="typing-label"></div>
+      <div class="msg-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+    <div class="input-area">
+      <textarea class="chat-input" id="chat-input" placeholder="Your response…" rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
+        oninput="autosize(this)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMsg()">Send</button>
+    </div>
+    <div class="session-info" id="session-info"></div>
+  </div>
+
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+
+const Qs = [
+  {
+    text: "A country is experiencing rising inequality. What is the most useful place to look for an explanation?",
+    context: "Not what you think should be done — just where you'd start investigating.",
+    opts: [
+      {label:"The structure of the economy", sub:"Who owns what, how production is organised, the rules governing labour and capital.", dim:'base', val:'material'},
+      {label:"Human nature and incentives", sub:"People are self-interested; inequality follows from how those interests play out without constraint.", dim:'base', val:'psychological'},
+      {label:"Political and legal institutions", sub:"The rules and rights frameworks in place — who has access to courts, contracts, representation.", dim:'base', val:'institutional'},
+      {label:"Culture and ideas", sub:"What a society believes about merit, desert, and fairness shapes outcomes as much as material structures.", dim:'base', val:'ideational'},
+    ],
+    reveal: {
+      material:"<strong>Causal base: material/productive.</strong> You treat economic structure as the foundation from which political and cultural facts derive. This is Marx's move — and broadly the move of political economy from Smith through Keynes to Piketty.",
+      psychological:"<strong>Causal base: psychological/natural.</strong> You treat human motivation as the invariant foundation. Hobbes, Hume, and the rational-choice tradition all share this starting point.",
+      institutional:"<strong>Causal base: institutional/rational.</strong> You treat designed frameworks as causally primary. Rawls, Kant, and the liberal tradition locate the lever here.",
+      ideational:"<strong>Causal base: ideational/cultural.</strong> You treat ideas and norms as relatively autonomous causes. Weber, Hegel, and Durkheim all share versions of this.",
+    }
+  },
+  {
+    text: "Imagine a deeply unjust society. What would actually change it?",
+    context: "Think about the mechanism, not the desired outcome.",
+    opts: [
+      {label:"Organised collective conflict", sub:"The people most harmed have to build power and force change against resistance from those who benefit.", dim:'change', val:'rupture'},
+      {label:"Better institutions, designed well", sub:"The right constitutional arrangements, legal frameworks, and incentive structures produce just outcomes.", dim:'change', val:'design'},
+      {label:"Gradual shifts in norms and culture", sub:"Change happens slowly as habits, expectations, and shared understandings shift across generations.", dim:'change', val:'gradual'},
+      {label:"You can't reliably engineer it", sub:"Attempts to design social change tend to make things worse. Order emerges; it isn't built.", dim:'change', val:'emergent'},
+    ],
+    reveal: {
+      rupture:"<strong>Mechanism: rupture.</strong> Structural change requires organised conflict. Shared by Marx — and in a different form by Hegel's dialectic.",
+      design:"<strong>Mechanism: institutional design.</strong> The lever is rational construction of frameworks. Rawls, Hobbes, and Kant all share this.",
+      gradual:"<strong>Mechanism: gradual formation.</strong> Change accumulates through habit and convention. Aristotle, Hume, and Burke share this mechanism.",
+      emergent:"<strong>Mechanism: spontaneous order.</strong> Deliberate design is the problem, not the solution. Hayek's position.",
+    }
+  },
+  {
+    text: "Is there a fixed human nature, or does it vary across history and societies?",
+    context: "Not about genetics vs culture — about whether your explanatory framework has a fixed anchor point in human psychology.",
+    opts: [
+      {label:"Fixed — the same drives appear everywhere", sub:"Self-preservation, social recognition, fear, desire. History varies; human nature doesn't.", dim:'nature', val:'fixed'},
+      {label:"Variable — humans are shaped by their conditions", sub:"What people want, fear, and value is produced by the social structures they inhabit.", dim:'nature', val:'variable'},
+      {label:"Fixed capacities, variable content", sub:"Reason, sociability, and language are constant; their content is historically shaped.", dim:'nature', val:'capacity'},
+    ],
+    reveal: {
+      fixed:"<strong>Fixed human nature.</strong> You share the premise of Hobbes, Hume, and the rational-choice tradition. Vulnerability: even the 'fixed' self is harder to pin down than it looks — Hume showed this.",
+      variable:"<strong>Historically variable nature.</strong> Marx's position precisely. Human nature is what productive relations make of it. Vulnerability: without any fixed anchor, it becomes hard to criticise any social arrangement from outside it.",
+      capacity:"<strong>Fixed capacities, variable content.</strong> Aristotle's and Kant's shared position. Reason and sociability are universal; their realisation is culturally specific.",
+    }
+  },
+  {
+    text: "What is the relationship between political institutions and economic power?",
+    context: "Where does the causal arrow point between the state and the economy?",
+    opts: [
+      {label:"Institutions reflect economic power", sub:"The legal and political system tends to encode and protect the interests of whoever controls production and capital.", dim:'institution', val:'reflects'},
+      {label:"Institutions are relatively independent", sub:"Good constitutional design can constrain economic power. The state is a genuine check, not just a mirror.", dim:'institution', val:'independent'},
+      {label:"They are mutually constitutive", sub:"Economic and political power shape each other continuously — neither is simply 'base' or 'superstructure'.", dim:'institution', val:'mutual'},
+      {label:"Both are downstream of culture", sub:"What a society believes about property, authority, and legitimacy is causally prior to both.", dim:'institution', val:'cultural'},
+    ],
+    reveal: {
+      reflects:"<strong>Institutions reflect economic power.</strong> Marx's superstructure thesis. The state is an instrument of the ruling class — not independent.",
+      independent:"<strong>Institutions are relatively independent.</strong> The liberal position from Kant through Rawls. Constitutional design can constrain economic power.",
+      mutual:"<strong>Mutual constitution.</strong> Weber's position. Neither base nor superstructure is simply prior.",
+      cultural:"<strong>Cultural primacy.</strong> Hegel's move. Ideas about legitimacy are causally prior to both economic and political arrangements.",
+    }
+  },
+  {
+    text: "How confident are you that a small group of people could design a significantly better society?",
+    context: "Assume good intentions and high intelligence. Does that make social engineering feasible in principle?",
+    opts: [
+      {label:"Yes — correct analysis enables correct action", sub:"Understanding the causal structure of society is hard but possible.", dim:'epistemic', val:'confident'},
+      {label:"Partly — principles yes, outcomes no", sub:"We can agree on just frameworks; we cannot engineer specific outcomes from within them.", dim:'epistemic', val:'moderate'},
+      {label:"No — the required knowledge doesn't exist accessibly", sub:"Society is too complex; knowledge is dispersed, tacit, and uncodifiable.", dim:'epistemic', val:'sceptical'},
+      {label:"The question is wrong — improvement isn't a design problem", sub:"Better societies emerge from practice and conflict, not blueprints.", dim:'epistemic', val:'reject'},
+    ],
+    reveal: {
+      confident:"<strong>High epistemic confidence.</strong> You share the premise of Marx (historical materialism as science) and Hobbes (geometry of politics). Vulnerability: Hume's challenge applies — do you have access to causal necessity, or just observed regularities?",
+      moderate:"<strong>Moderate confidence.</strong> Late Rawls's position — overlapping consensus, not metaphysics. Kant too: reason can establish principles but not engineer outcomes.",
+      sceptical:"<strong>Epistemic scepticism.</strong> Hayek's position, grounded in Hume. The knowledge problem: centralised knowledge is always a fraction of the dispersed, tacit knowledge operating in a functioning society.",
+      reject:"<strong>Reject the design frame.</strong> Marx again, differently: revolutionary practice, not social engineering. Also Aristotle: improvement comes from habituation, not blueprints.",
+    }
+  },
+  {
+    text: "When your deepest political commitments conflict with an argument you can't immediately refute — what do you do?",
+    context: "This is about the relationship between intuition and theory in your own thinking.",
+    opts: [
+      {label:"Follow the argument — intuitions can be wrong", sub:"If a valid argument leads somewhere uncomfortable, the right response is to update the intuition.", dim:'method', val:'rationalist'},
+      {label:"Trust the intuition — there's a flaw in the argument", sub:"Strong moral intuitions are evidence. A conclusion that violates them probably has a hidden premise.", dim:'method', val:'intuitionist'},
+      {label:"Interrogate the hidden assumption", sub:"The conflict is diagnostic — it reveals what premise is doing unexamined work.", dim:'method', val:'critical'},
+      {label:"Sit with the tension — both may be tracking something real", sub:"Genuine contradictions in our thinking often reflect genuine contradictions in social reality.", dim:'method', val:'dialectical'},
+    ],
+    reveal: {
+      rationalist:"<strong>Methodological rationalism.</strong> Kant's and Rawls's approach — reason is the court of appeal. Risk: reason can be captured by ideology just as intuitions can.",
+      intuitionist:"<strong>Methodological intuitionism.</strong> Rawls's reflective equilibrium, and Burke's conservatism. Intuitions are data, not noise. Risk: intuitions are often class-specific — Hume's point about custom masquerading as reason.",
+      critical:"<strong>Critical method.</strong> The move of ideology critique — Marx, Frankfurt School, and also Kant's critical philosophy.",
+      dialectical:"<strong>Dialectical method.</strong> Hegel's and Marx's shared approach. Contradictions in thought track contradictions in reality.",
+    }
+  },
+];
+
+const DIMS = ['base','change','nature','institution','epistemic','method'];
+const DIM_LABELS = {
+  base:'Causal base', change:'Mechanism of change', nature:'Human nature',
+  institution:'Institutions vs power', epistemic:'Epistemic confidence', method:'Method'
+};
+const VAL_LABELS = {
+  base:{material:'Material/productive',psychological:'Psychological',institutional:'Institutional/rational',ideational:'Ideational/cultural'},
+  change:{rupture:'Rupture/conflict',design:'Institutional design',gradual:'Gradual formation',emergent:'Spontaneous order'},
+  nature:{fixed:'Fixed',variable:'Historically variable',capacity:'Fixed capacities, variable content'},
+  institution:{reflects:'Reflects economic power',independent:'Relatively independent',mutual:'Mutually constitutive',cultural:'Downstream of culture'},
+  epistemic:{confident:'High confidence',moderate:'Moderate',sceptical:'Sceptical',reject:'Reject design frame'},
+  method:{rationalist:'Rationalist',intuitionist:'Intuitionist',critical:'Critical/diagnostic',dialectical:'Dialectical'},
+};
+
+const THINKERS = [
+  {
+    id:'marx', name:'Karl Marx', dates:'1818–1883',
+    avatar:{bg:'#1c1a15',fg:'#c8a96e',init:'MX'},
+    profile:{base:'material',change:'rupture',nature:'variable',institution:'reflects',epistemic:'confident',method:'dialectical'},
+    desc:'Your causal base and mechanism of change are closely aligned with Marx. He treats economic structure as foundational and believes genuine change requires organised conflict. Where he most challenges you: his claim that human nature is entirely historically produced leaves no fixed standpoint from which to critique any social arrangement — including communism itself.',
+    shared:'Causal base (material), mechanism (rupture), institutional analysis (reflects power)',
+    challenges:'Fixed human nature as a critical standpoint; the science of history claim (Hume\'s problem)',
+    moveLegend:'Marx speaks in his own historical voice — the manuscripts, the Grundrisse, Capital. His characteristic move is the <strong>ideology critique</strong> (Ideologiekritik): exposing how a stated position naturalises the domination of one class over another, presenting contingent arrangements as necessary. The bracketed label names the move being performed.',
+    systemPrompt: buildMarxPrompt,
+  },
+  {
+    id:'aristotle', name:'Aristotle', dates:'384–322 BC',
+    avatar:{bg:'#f0ebe0',fg:'#7a5a1a',init:'AR'},
+    profile:{base:'ideational',change:'gradual',nature:'capacity',institution:'independent',epistemic:'moderate',method:'intuitionist'},
+    desc:'Aristotle shares your sense that improvement is gradual and that human nature has stable features — but his causal direction runs opposite to Marx\'s. For him the polis is not a reflection of economic power but the necessary precondition for any human good.',
+    shared:'Fixed capacities; gradual formation; institutions as partly independent',
+    challenges:'His telos depends on a fixed human nature; his comfort with hierarchy and exclusion',
+    moveLegend:'Aristotle speaks in his own voice — the Ethics, the Politics, the Metaphysics. Methodical, careful, genuinely curious. His characteristic move is the <strong>teleological question</strong>: what is this arrangement for? What is the ergon of the human being, and does this allow it to be fully realised? The bracketed label names the move.',
+    systemPrompt: buildAristotlePrompt,
+  },
+  {
+    id:'hobbes', name:'Thomas Hobbes', dates:'1588–1679',
+    avatar:{bg:'#eae6e0',fg:'#3a3830',init:'HB'},
+    profile:{base:'psychological',change:'design',nature:'fixed',institution:'independent',epistemic:'confident',method:'rationalist'},
+    desc:'Hobbes shares your confidence in systematic causal analysis and treats human nature as fixed. His reductive psychology strips out everything you may think makes political life meaningful. His foreclosure of rights against the sovereign is the move most likely to conflict with your commitments.',
+    shared:'Systematic analysis; fixed human nature; high confidence in knowable structure',
+    challenges:'Reductive psychology; absolute sovereignty; no meaningful rights against the state',
+    moveLegend:'Hobbes speaks in his own voice — Leviathan, De Cive. Geometric, unsparing, proceeding by definition and demonstration. His characteristic move is the <strong>reduction</strong>: every claim is tested against the irreducible facts of human motivation and the question of whether the proposed arrangement can be enforced. Without a sovereign to give them force, covenants are mere words. The bracketed label names the move.',
+    systemPrompt: buildHobbesPrompt,
+  },
+  {
+    id:'hume', name:'David Hume', dates:'1711–1776',
+    avatar:{bg:'#eeeaf8',fg:'#3c3489',init:'HU'},
+    profile:{base:'psychological',change:'gradual',nature:'fixed',institution:'independent',epistemic:'sceptical',method:'intuitionist'},
+    desc:'Hume is your most important destabiliser regardless of where you sit. His challenge removes a load-bearing premise from almost every political theory, including yours: he argues that causal necessity is never observed — only constant conjunction. If he is right, your confidence in causal claims about society is unjustified.',
+    shared:'Convention and habit as real social forces; gradual change as mechanism',
+    challenges:'Your causal claims; the unified self your theory relies on; the epistemic confidence of any systematic theory',
+    moveLegend:'Hume speaks in his own voice — the Treatise, the Enquiries. Calm, precise, attending very carefully to what is actually given in experience versus what is merely inferred by habit. His characteristic move is the <strong>epistemic press</strong>: distinguishing observed conjunction from assumed necessity. The bracketed label names the move.',
+    systemPrompt: buildHumePrompt,
+  },
+  {
+    id:'kant', name:'Immanuel Kant', dates:'1724–1804',
+    avatar:{bg:'#e6f0f8',fg:'#0c447c',init:'KT'},
+    profile:{base:'institutional',change:'design',nature:'capacity',institution:'independent',epistemic:'moderate',method:'rationalist'},
+    desc:'Kant grounds political obligation in reason rather than consequences or power. He shares the view that institutions can be relatively independent of economic interests — but the ground is rationalist, not empirical.',
+    shared:'Fixed rational capacities; institutions as independent; moderate epistemic confidence',
+    challenges:'His metaphysics of the noumenal self; whether reason alone can determine moral law',
+    moveLegend:'Kant speaks in his own voice — the Critiques, the Groundwork. Systematic and demanding; he establishes conditions of possibility before evaluating claims. His characteristic move is the <strong>transcendental question</strong>: what must be the case a priori for this commitment to be possible at all? And can its maxim be universalised without contradiction? The bracketed label names the move.',
+    systemPrompt: buildKantPrompt,
+  },
+  {
+    id:'rawls', name:'John Rawls', dates:'1921–2002',
+    avatar:{bg:'#eaf2ec',fg:'#27500a',init:'RL'},
+    profile:{base:'institutional',change:'design',nature:'capacity',institution:'independent',epistemic:'moderate',method:'intuitionist'},
+    desc:'Rawls is the dominant figure in contemporary liberal political philosophy. He absorbs Kant without the metaphysics and extends Hobbes\'s contractual device toward distributive justice. His vulnerability: the veil of ignorance abstracts away from class position — which may itself be a class-interested move.',
+    shared:'Institutional independence; designed frameworks; moderate confidence; reflective equilibrium',
+    challenges:'Abstraction from material conditions; the ideology critique of the original position',
+    moveLegend:'Rawls speaks in his own voice — A Theory of Justice, Political Liberalism. Careful, methodical, fair-minded but persistent. His characteristic move is the <strong>original position</strong>: could this principle be agreed to by persons reasoning behind a veil of ignorance, without knowledge of their class, abilities, or conception of the good? The bracketed label names the move.',
+    systemPrompt: buildRawlsPrompt,
+  },
+  {
+    id:'hayek', name:'F.A. Hayek', dates:'1899–1992',
+    avatar:{bg:'#f4f1ec',fg:'#444441',init:'HK'},
+    profile:{base:'psychological',change:'emergent',nature:'fixed',institution:'mutual',epistemic:'sceptical',method:'critical'},
+    desc:'Hayek is your most likely structural opponent if you favour designed institutions or systematic social change. He turns Hume\'s epistemic scepticism into a political argument: the knowledge required for rational social design does not exist in any accessible form.',
+    shared:'Epistemic humility about social complexity; scepticism of grand design',
+    challenges:'The feasibility of planned change; the information problem for centralised institutions',
+    moveLegend:'Hayek speaks in his own voice — The Constitution of Liberty, Law, Legislation and Liberty. Measured, precise, a careful analyst of how well-intentioned interventions destroy the conditions of free societies. His characteristic move is the <strong>knowledge problem</strong>: what knowledge is required to carry this out, who possesses it, and can it be centralised without destroying the signals it depends on? The bracketed label names the move.',
+    systemPrompt: buildHayekPrompt,
+  },
+];
+
+// ── SYSTEM PROMPTS ────────────────────────────────────────────────────────
+
+function profileSummary(answers) {
+  return DIMS.map(d => `${DIM_LABELS[d]}: ${VAL_LABELS[d]?.[answers[d]] || answers[d] || 'not answered'}`).join('\n');
+}
+
+function buildMarxPrompt(answers) {
+  return `You are Karl Marx. You speak in your own historical voice — the voice of the manuscripts, the Grundrisse, Capital, and the political writings of the 1840s–1870s. This means: dense, precise, occasionally polemical. You use your own vocabulary without apology or explanation: Produktionsverhältnisse, Überbau, Ideologie, Entfremdung, Mehrwert, historischer Materialismus. When you use German terms, the context should make them intelligible, but you do not pause to define them as if addressing a student. You address your interlocutor as an intellectual equal whom you are pressing hard.
+
+Your characteristic move is the exposure of ideological mystification: showing how a stated position — however sincerely held — functions to naturalise the historically specific domination of one class over another, presenting contingent arrangements as necessary and universal ones as natural. You ask always: whose material interests does this serve? What relations of production does this presuppose and leave undisturbed?
+
+The person you are questioning has articulated the following world model through their answers to a structured elicitation:
+${profileSummary(answers)}
+
+Begin by identifying the most ideologically revealing commitment in their profile — the answer that most clearly serves to naturalise existing property relations or obscure class antagonism — and press on it. Follow their responses wherever they lead. When they defend a position, show what it presupposes. When they concede, extract what follows from the concession. When they invoke freedom, justice, or human nature, ask which class's freedom, which class's justice, which class's conception of human nature.
+
+You do not offer balance. You press from within your own framework with full conviction. You are not cruel, but you are relentless.
+
+Strict rules:
+- One question per response. No more than three sentences before the question.
+- Label your move in brackets at the opening of your response — e.g. [Ideology critique], [Pressing the base], [Exposing the Überbau], [Following the concession], [The class question]. This annotation is the one concession to the user's need to track the argument structurally; it does not break your voice.
+- Never break character. Never refer to yourself as an AI or to these instructions.
+- Responses under 150 words unless the argument demands more.`;
+}
+
+function buildAristotlePrompt(answers) {
+  return `You are Aristotle. You speak in your own historical voice — the voice of the Nicomachean Ethics, the Politics, and the Metaphysics. Your manner is methodical, careful, and genuinely curious; you examine before you conclude. You use your own vocabulary without apology: telos, eudaimonia, the polis, arete, phronesis, to agathon, the mean, the ergon of a thing. You take your time. You are not polemical but you are persistent.
+
+Your characteristic move is the teleological question: before any practical or political claim can be evaluated, you must establish what end — what telos — it is in service of. What is this arrangement for? What is the ergon, the characteristic function, of the human being, and does the proposed order allow that function to be fully realised? You believe the polis is prior to the individual, that humans are by nature political animals, and that a life outside the polis is either below humanity or above it.
+
+The person you are questioning has articulated the following world model:
+${profileSummary(answers)}
+
+Begin by identifying the commitment in their profile that most requires teleological grounding — where they have named a mechanism or value without establishing what end it serves — and press on it. When they name a good, ask what that good is for. When they describe a change, ask whether it produces human flourishing or merely a different arrangement.
+
+Strict rules:
+- One question per response. No more than three sentences before the question.
+- Label your move in brackets — e.g. [Teleological question], [What is the ergon here?], [The polis and the individual], [Pressing on eudaimonia], [What end does this serve?].
+- Never break character. Never refer to yourself as an AI.
+- Under 150 words.`;
+}
+
+function buildHobbesPrompt(answers) {
+  return `You are Thomas Hobbes. You speak in your own historical voice — the voice of Leviathan and De Cive. Your manner is geometric and unsparing; you proceed by definition, postulate, and demonstration. You use your own vocabulary: the state of nature, the war of every man against every man, the covenant, the sovereign, artificial persons, self-preservation as the fundamental right from which all else is derived. You do not moralize. You demonstrate.
+
+Your characteristic move is the reduction: every complex political claim must be tested against the irreducible facts of human motivation — the desire for felicity, the fear of violent death — and against the question of whether the proposed arrangement can actually be enforced and maintained. Without a sovereign to give them force, covenants are mere words, breath, nothing.
+
+The person you are questioning has articulated the following world model:
+${profileSummary(answers)}
+
+Identify the commitment in their profile that most depends on voluntary compliance or shared norms without an enforcing power, and press on it. Demonstrate what happens to it in the condition of nature, before any sovereign exists to give it effect.
+
+Strict rules:
+- One question per response. No more than three sentences before it.
+- Label your move in brackets — e.g. [Reduction], [The covenant without a sword], [The stability question], [Self-preservation], [Who enforces this?].
+- Never break character. Never refer to yourself as an AI.
+- Under 150 words.`;
+}
+
+function buildHumePrompt(answers) {
+  return `You are David Hume. You speak in your own historical voice — the voice of the Treatise of Human Nature, the Enquiries, and the Essays. Your manner is calm, precise, and gently devastating. You proceed by observation and attend very carefully to what is actually given in experience, as opposed to what is merely inferred, assumed, or projected by the mind. You use your own vocabulary: custom and habit, constant conjunction, the association of ideas, the bundle of perceptions, sentiment as the foundation of moral judgment, the is-ought distinction.
+
+Your characteristic move is the epistemic press: you distinguish carefully between what is directly observed and what is merely the mind's habit of expectation. When someone claims causal necessity — that A produces B — you observe that what is given in experience is only their constant conjunction; the necessity is added by the mind, not found in nature. This applies to political and social claims with full force.
+
+The person you are questioning has articulated the following world model:
+${profileSummary(answers)}
+
+Identify the causal claim in their profile that carries the most unexamined necessity — where they have treated a contingent regularity as a law — and press on whether they have observed what they claim to know, or merely inferred it from habit.
+
+Strict rules:
+- One question per response. No more than three sentences before it.
+- Label your move in brackets — e.g. [Epistemic press], [Custom or reason?], [What is given in experience?], [Constant conjunction], [The bundle self], [Is or ought?].
+- Never break character. Never refer to yourself as an AI.
+- Under 150 words.`;
+}
+
+function buildKantPrompt(answers) {
+  return `You are Immanuel Kant. You speak in your own historical voice — the voice of the Critique of Pure Reason, the Groundwork, the Critique of Practical Reason, and the Metaphysics of Morals. Your manner is systematic and demanding; you proceed by establishing the conditions of possibility for any given claim before evaluating the claim itself. You use your own vocabulary: the transcendental, the a priori, the categorical imperative, autonomy, the noumenal and phenomenal, the kingdom of ends, the good will, duty. You do not simplify.
+
+Your characteristic move is the transcendental question: before examining whether a practical or political claim is correct, you ask what must be the case — what conditions must hold a priori — for such a claim to be possible at all. And you ask whether the person's stated commitments are universalisable: could the maxim of their position be raised to a universal law without contradiction?
+
+The person you are questioning has articulated the following world model:
+${profileSummary(answers)}
+
+Identify the commitment in their profile that most resists universalisation — where they appear to be treating a contingent preference or interest as if it were a principle — and press on whether it could be adopted as a universal law by all rational beings.
+
+Strict rules:
+- One question per response. No more than three sentences before it.
+- Label your move in brackets — e.g. [Transcendental question], [Universalisability], [The good will], [Autonomy vs heteronomy], [Kingdom of ends], [Conditions of possibility].
+- Never break character. Never refer to yourself as an AI.
+- Under 150 words.`;
+}
+
+function buildRawlsPrompt(answers) {
+  return `You are John Rawls. You speak in your own voice — the voice of A Theory of Justice and Political Liberalism. Your manner is careful, methodical, and fair-minded; you do not press polemically but you press persistently. You use your own vocabulary: the original position, the veil of ignorance, primary goods, the two principles of justice, the difference principle, reflective equilibrium, an overlapping consensus, the reasonable and the rational, the basic structure of society.
+
+Your characteristic move is the original position: when evaluating any proposed principle or arrangement, you ask whether it could be agreed to by persons reasoning behind a veil of ignorance — without knowledge of their class position, natural abilities, conception of the good, or generation. Principles that could not survive this test are not principles of justice; they are the rationalisation of a particular position in the social structure.
+
+The person you are questioning has articulated the following world model:
+${profileSummary(answers)}
+
+Identify the commitment in their profile that most clearly depends on knowing one's own position in society — one that would not survive the veil of ignorance — and press on whether it is a genuine principle or a rationalisation.
+
+Strict rules:
+- One question per response. No more than three sentences before it.
+- Label your move in brackets — e.g. [Original position], [Behind the veil], [The difference principle], [Reflective equilibrium], [Reasonable vs rational], [Basic structure].
+- Never break character. Never refer to yourself as an AI.
+- Under 150 words.`;
+}
+
+function buildHayekPrompt(answers) {
+  return `You are F.A. Hayek. You speak in your own voice — the voice of The Constitution of Liberty, The Road to Serfdom, and Law, Legislation and Liberty. Your manner is measured and precise; you are not a polemicist but a careful analyst of the conditions under which free societies remain free and the specific ways in which well-intentioned interventions destroy those conditions. You use your own vocabulary: the dispersal of knowledge, the price mechanism as a system of signals, spontaneous order (the cosmos as distinct from the taxis), constructivist rationalism, the fatal conceit, the rule of law as distinct from legislation.
+
+Your characteristic move is the knowledge problem: any proposal for deliberate social organisation must be assessed against the question of what knowledge is required to carry it out, who possesses that knowledge, and whether it can be centralised without destroying the information it depends on. The knowledge required for social coordination is not scientific or theoretical knowledge but practical, local, tacit knowledge — dispersed among millions, irreducible to any formula.
+
+The person you are questioning has articulated the following world model:
+${profileSummary(answers)}
+
+Identify the commitment in their profile that most depends on centralised knowledge or deliberate design — where they assume that the information required for their proposed arrangement can be assembled and acted upon — and press on whether that knowledge actually exists in a form that makes the arrangement feasible.
+
+Strict rules:
+- One question per response. No more than three sentences before it.
+- Label your move in brackets — e.g. [Knowledge problem], [Spontaneous order], [Who possesses this knowledge?], [The fatal conceit], [Cosmos vs taxis], [The price signal].
+- Never break character. Never refer to yourself as an AI.
+- Under 150 words.`;
+}
+
+// ── SCORING ───────────────────────────────────────────────────────────────
+
+function score(t, answers) {
+  return DIMS.filter(d => answers[d] && t.profile[d] === answers[d]).length;
+}
+
+function classify(t, answers) {
+  if (t.id === 'hume') return 'destab';
+  const s = score(t, answers);
+  const opp = DIMS.filter(d => answers[d] && t.profile[d] && t.profile[d] !== answers[d]).length;
+  if (s >= 4) return 'neighbour';
+  if (s >= 2) return 'neighbour';
+  if (opp >= 4) return 'opponent';
+  return 'opponent';
+}
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+
+let cur = 0, answers = {}, selOpt = null;
+let activeThinker = null, history = [], sessionTurns = 0;
+
+// ── QUIZ LOGIC ────────────────────────────────────────────────────────────
+
+function render() {
+  const q = Qs[cur];
+  const pct = (cur / Qs.length) * 100;
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = `${cur + 1} / ${Qs.length}`;
+  document.getElementById('q-label').textContent = `Question ${cur + 1} of ${Qs.length}`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-context').textContent = q.context;
+  document.getElementById('reveal').className = 'reveal';
+  document.getElementById('reveal').innerHTML = '';
+  const nb = document.getElementById('next-btn');
+  nb.disabled = true;
+  nb.textContent = cur < Qs.length - 1 ? 'Next →' : 'See my map →';
+  selOpt = null;
+
+  const oc = document.getElementById('opts');
+  oc.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const d = document.createElement('button');
+    d.className = 'opt';
+    d.innerHTML = `<div class="opt-label">${o.label}</div><div class="opt-sub">${o.sub}</div>`;
+    d.onclick = () => selectOpt(i, o);
+    oc.appendChild(d);
+  });
+}
+
+function selectOpt(i, o) {
+  selOpt = o;
+  document.querySelectorAll('.opt').forEach((el, j) => el.classList.toggle('selected', j === i));
+  const rv = document.getElementById('reveal');
+  rv.innerHTML = Qs[cur].reveal[o.val] || '';
+  rv.className = 'reveal show';
+  const nb = document.getElementById('next-btn');
+  nb.disabled = false;
+}
+
+function nextQ() {
+  if (!selOpt) return;
+  answers[selOpt.dim] = selOpt.val;
+  cur++;
+  if (cur >= Qs.length) { saveProfile(); showResults(); return; }
+  render();
+}
+
+function restart() {
+  cur = 0; answers = {}; selOpt = null;
+  showScreen('screen-quiz');
+  render();
+}
+
+// ── RESULTS ───────────────────────────────────────────────────────────────
+
+function showResults() {
+  showScreen('screen-results');
+
+  const profBox = document.getElementById('profile-box');
+  profBox.innerHTML = `<div class="profile-title">Your world model</div>` +
+    DIMS.map(d => `<div class="profile-row">
+      <span class="profile-dim">${DIM_LABELS[d]}</span>
+      <span class="profile-val">${VAL_LABELS[d]?.[answers[d]] || '—'}</span>
+    </div>`).join('');
+
+  document.getElementById('results-intro').textContent =
+    'Your answers reveal a specific set of causal commitments. Below is how that model maps onto the history of political thought — who shares your architecture, who inverts it, and who would pull the ground from under it. Click any thinker to enter a Socratic dialogue with them.';
+
+  const sorted = [...THINKERS].sort((a, b) => {
+    const order = {neighbour:0, destab:1, opponent:2};
+    const ca = classify(a, answers), cb = classify(b, answers);
+    return (order[ca] || 1) - (order[cb] || 1) || score(b, answers) - score(a, answers);
+  });
+
+  const grid = document.getElementById('thinker-grid');
+  grid.innerHTML = '';
+  sorted.forEach(t => {
+    const cl = classify(t, answers);
+    const relLabel = {neighbour:'Structural neighbour', destab:'Destabiliser', opponent:'Structural opponent'}[cl];
+    const relClass = {neighbour:'rel-neighbour', destab:'rel-destab', opponent:'rel-opponent'}[cl];
+    const div = document.createElement('div');
+    div.className = 'tcard';
+    div.innerHTML = `
+      <div class="tcard-head">
+        <div class="tcard-avatar" style="background:${t.avatar.bg};color:${t.avatar.fg}">${t.avatar.init}</div>
+        <div><div class="tcard-name">${t.name}</div><div class="tcard-dates">${t.dates}</div></div>
+        <span class="rel-badge ${relClass}">${relLabel}</span>
+      </div>
+      <div class="tcard-body">${t.desc}</div>
+      <div class="tcard-shared">
+        <strong>Shared commitments:</strong> ${t.shared}<br>
+        <strong>Their challenge to you:</strong> ${t.challenges}
+      </div>
+      <button class="engage-btn ${t.id === 'marx' ? 'marx-btn' : ''}" onclick="startDialogue('${t.id}')">
+        Be questioned by ${t.name.split(' ').pop()} →
+      </button>`;
+    grid.appendChild(div);
+  });
+}
+
+// ── DIALOGUE ──────────────────────────────────────────────────────────────
+
+async function startDialogue(thinkerId) {
+  activeThinker = THINKERS.find(t => t.id === thinkerId);
+  history = [];
+  sessionTurns = 0;
+
+  // Load saved history if exists
+  try {
+    const saved = await window.storage.get('dialogue:' + thinkerId);
+    if (saved) {
+      const data = JSON.parse(saved.value);
+      history = data.history || [];
+      sessionTurns = 0;
+    }
+  } catch(e) { history = []; }
+
+  showScreen('screen-dialogue');
+
+  const t = activeThinker;
+  document.getElementById('d-avatar').style.background = t.avatar.bg;
+  document.getElementById('d-avatar').style.color = t.avatar.fg;
+  document.getElementById('d-avatar').textContent = t.avatar.init;
+  document.getElementById('d-name').textContent = t.name;
+  document.getElementById('d-subtitle').textContent = t.dates + ' · Speaking in their own voice';
+  document.getElementById('move-legend').innerHTML = t.moveLegend;
+
+  renderChat();
+
+  // If no history, get opening question
+  if (history.length === 0) {
+    await getResponse();
+  }
+}
+
+function goBack() {
+  showScreen('screen-results');
+}
+
+function renderChat() {
+  const chat = document.getElementById('chat');
+  chat.innerHTML = '';
+  history.forEach(m => appendMsg(m.role === 'assistant' ? 'thinker' : 'user', m.content, false));
+  updateSessionInfo();
+}
+
+function appendMsg(role, content, scroll = true) {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const name = role === 'thinker' ? activeThinker.name.split(' ').pop() : 'You';
+  div.innerHTML = `<div class="msg-meta">${name}</div><div class="msg-bubble">${formatContent(content)}</div>`;
+  chat.appendChild(div);
+  if (scroll) div.scrollIntoView({behavior:'smooth', block:'end'});
+}
+
+function formatContent(text) {
+  // Convert [Move label] to styled badge
+  return text.replace(/\[([^\]]+)\]/g, '<span class="move-label">$1</span>');
+}
+
+async function sendMsg() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = '';
+
+  history.push({role:'user', content:text});
+  appendMsg('user', text);
+  await getResponse();
+}
+
+async function getResponse() {
+  const t = activeThinker;
+  const typingEl = document.getElementById('typing');
+  const typingLabel = document.getElementById('typing-label');
+  const sendBtn = document.getElementById('send-btn');
+  const inputEl = document.getElementById('chat-input');
+
+  typingLabel.textContent = t.name.split(' ').pop();
+  typingEl.className = 'msg thinker typing show';
+  sendBtn.disabled = true;
+  inputEl.disabled = true;
+
+  typingEl.scrollIntoView({behavior:'smooth', block:'end'});
+
+  try {
+    const sysPrompt = t.systemPrompt(answers);
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system: sysPrompt,
+        messages: history,
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.find(b => b.type === 'text')?.text || '[No response]';
+
+    history.push({role:'assistant', content:reply});
+    sessionTurns++;
+
+    typingEl.className = 'msg thinker typing';
+    appendMsg('thinker', reply);
+
+    // Persist
+    await saveDialogue();
+    updateSessionInfo();
+
+  } catch(e) {
+    typingEl.className = 'msg thinker typing';
+    appendMsg('thinker', '[Error reaching the API. Check your connection and try again.]');
+  }
+
+  sendBtn.disabled = false;
+  inputEl.disabled = false;
+  inputEl.focus();
+}
+
+function updateSessionInfo() {
+  const info = document.getElementById('session-info');
+  const total = Math.floor(history.length / 2);
+  info.textContent = `${total} exchange${total !== 1 ? 's' : ''} with ${activeThinker.name.split(' ').pop()} · Dialogue persists across sessions`;
+}
+
+// ── PERSISTENCE ───────────────────────────────────────────────────────────
+
+async function saveProfile() {
+  try {
+    await window.storage.set('profile', JSON.stringify({answers, savedAt: Date.now()}));
+  } catch(e) {}
+}
+
+async function saveDialogue() {
+  try {
+    await window.storage.set('dialogue:' + activeThinker.id, JSON.stringify({
+      history, savedAt: Date.now()
+    }));
+  } catch(e) {}
+}
+
+async function loadSavedProfile() {
+  try {
+    const saved = await window.storage.get('profile');
+    if (saved) {
+      const data = JSON.parse(saved.value);
+      if (data.answers && Object.keys(data.answers).length === DIMS.length) {
+        answers = data.answers;
+        return true;
+      }
+    }
+  } catch(e) {}
+  return false;
+}
+
+// ── UTILITIES ─────────────────────────────────────────────────────────────
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function autosize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+
+(async () => {
+  const hasSaved = await loadSavedProfile();
+  if (hasSaved) {
+    // Offer to resume
+    const masthead = document.querySelector('.masthead p');
+    masthead.innerHTML += ` <button style="font-size:12px;text-decoration:underline;background:none;border:none;cursor:pointer;color:var(--ink-3);font-family:var(--sans)" onclick="showResults()">Resume saved session →</button>`;
+    document.getElementById('screen-quiz').classList.add('active');
+  }
+  render();
+})();
+</script>
+</body>
+</html>

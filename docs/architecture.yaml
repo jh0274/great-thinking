@@ -1,0 +1,113 @@
+# docs/architecture.yaml
+# Canonical architecture state — update on every structural change, then run /context-hygiene
+# Last updated: 2026-04-17
+version: "0.1.0"
+
+# ─── USER JOURNEY ────────────────────────────────────────────────────────────
+user_journey:
+  steps:
+    - id: elicitation
+      label: "6 forced-choice questions"
+      next: [scoring]
+
+    - id: scoring
+      label: "Score profile against 7 thinker profiles"
+      next: [results]
+      internal: true
+
+    - id: results
+      label: "Ranked thinker cards (neighbour / destabiliser / opponent)"
+      next: [thinker_select]
+
+    - id: thinker_select
+      label: "User selects thinker"
+      next: [dialogue]
+
+    - id: dialogue
+      label: "Multi-turn Socratic dialogue"
+      next: [thinker_select]
+      notes: "Returnable; history persisted per thinker"
+
+  # V1.1 additions (not yet active)
+  planned:
+    - id: follow_up
+      label: "1 targeted follow-up question"
+      inserts_after: elicitation
+      status: v1.1
+
+    - id: tension_card
+      label: "Internal inconsistency card on results screen"
+      inserts_after: results
+      status: v1.1
+
+# ─── BUSINESS LOGIC ──────────────────────────────────────────────────────────
+business_logic:
+  ontology_files:
+    - file: dimensions.json
+      contains: "6 dimensions, each with 3-4 controlled vocabulary values"
+    - file: thinkers.json
+      contains: "7 thinkers: profile[], characteristicMove, premiseTargets[]"
+    - file: premises.json
+      contains: "8 premises: id, statement, thinker_targets[]"
+    - file: moves.json
+      contains: "7 move primitives: destabilisation, inversion, absorption, rejection, extension, reduction, foreclosure"
+
+  processes:
+    - name: Scoring
+      input: "PositionProfile + Thinker[].profile"
+      rule: ">=3 matching dimensions = neighbour; <3 = opponent; Hume always = destabiliser"
+      output: "[{thinker, classification, attackVector}] ranked"
+
+    - name: DialogueTurn
+      input: "SystemPrompt(thinker, profile) + ConversationHistory"
+      output: "1 question + [move label] in historical voice, ≤150 words"
+
+    - name: PremiseExtraction
+      input: "Last user message in dialogue"
+      output: "premise status: held | conceded | contested"
+      status: v1.1
+
+    - name: TensionDetection
+      input: "PositionProfile"
+      output: "Detected contradictory premise pairs → recommended thinker"
+      status: v1.1
+
+# ─── ARCHITECTURE ─────────────────────────────────────────────────────────────
+architecture:
+  frontend:
+    shell: index.html
+    modules:
+      engine:
+        - elicitation.js    # question flow, position capture
+        - scorer.js         # profile → thinker scores → classification
+        - router.js         # returns ranked thinker list
+        - dialogue.js       # API call, history management, storage r/w
+        - prompts.js        # systemPromptFn per thinker
+      ui:
+        - quiz.js           # question rendering, option selection, progress
+        - results.js        # thinker card rendering
+        - chat.js           # message rendering, input handling
+
+  api:
+    provider: Anthropic
+    model: claude-sonnet-4-20250514
+    calls:
+      - name: dialogue_turn
+        trigger: "user submits chat message"
+        type: multi-turn
+        system_prompt: "thinker voice + embedded profile + move instruction"
+        max_tokens: ~200
+
+      - name: premise_extraction
+        trigger: "after each dialogue turn"
+        type: single-shot
+        system_prompt: "classify user response re: one premise"
+        max_tokens: 5
+        status: v1.1
+
+  storage:
+    adapter: "window.storage (Claude artifact API)"
+    keys:
+      - position_profile          # {base, change, nature, institution, epistemic, method}
+      - dialogue_history_{id}     # per-thinker conversation array
+      - premise_state             # {P1..P8: held|conceded|contested|unknown} — v1.1
