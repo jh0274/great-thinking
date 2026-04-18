@@ -30,10 +30,12 @@ A web app that elicits a user's philosophical position profile, matches them to 
 
 ## Current phase
 
-`V1 implementation` — Engine and ontology complete; pages are stubs awaiting UI wiring.
+`V1.1 planning` — V1 complete. CIB engine spec received; beginning implementation planning.
 
-- Done: ontology JSON, all `lib/engine/` modules, `/api/dialogue` route
-- Next: wire elicitation flow on `/` (quiz → sessionStorage → `/results`)
-- Then: `/results` ranked thinker cards, `/dialogue/[id]` chat interface
+- Done: ontology JSON, all `lib/engine/` modules, `/api/dialogue` route, quiz (`/`), results (`/results`), dialogue (`/dialogue/[id]`)
+- CIB engine spec at `docs/cib-engine-spec.md` — replaces mismatch scorer with weighted cross-impact matrix; adds coherence scoring, explainable routing, gap finding
+- Next: `ontology/cross-impact-matrix.json` schema → `lib/engine/cib.ts` (coherenceScore, tensionScore, findGaps) → swap scorer/router → `/succession` visual
+- Research agent matrix population (Tier 1+2 citations) runs parallel to code implementation
+- Spec invariant: `/engine/cib.js` → use `lib/engine/cib.ts` (TypeScript, project convention)
 
-_Last updated: 2026-04-17_
+_Last updated: 2026-04-18_

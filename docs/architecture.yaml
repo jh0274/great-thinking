@@ -1,15 +1,15 @@
 # docs/architecture.yaml
 # Canonical architecture state — update on every structural change, then run /checkpoint
-# Last updated: 2026-04-17
+# Last updated: 2026-04-18
 version: "0.1.0"
 
 # ─── IMPLEMENTATION STATUS ────────────────────────────────────────────────────
 # stub = placeholder only | wip = partially implemented | done = complete
 implementation_status:
   pages:
-    /:              stub   # elicitation flow not yet wired
-    /results:       stub   # ranking display not yet wired
-    /dialogue/[id]: stub   # chat interface not yet wired
+    /:              done   # quiz elicitation flow, sessionStorage save, navigate to /results
+    /results:       done   # ranked thinker cards, classification badges, engage links
+    /dialogue/[id]: done   # chat interface, opening message seed, sessionStorage history
   api:
     /api/dialogue:  done   # Anthropic POST, prompt builder, response serialised
   engine:
@@ -18,6 +18,9 @@ implementation_status:
     router.ts:      done   # rankThinkers → sorted RankedThinker[]
     prompts.ts:     done   # PROMPT_BUILDERS per thinker
     types.ts:       done   # PositionProfile, Thinker, RankedThinker, etc.
+    cib.ts:         stub   # v1.1 — CIB engine: coherenceScore, tensionScore, findGaps
+  ontology_planned:
+    cross-impact-matrix.json: stub  # v1.1 — weighted cross-impact pairs with citations
   ontology:
     dimensions.json: done
     thinkers.json:   done
@@ -61,6 +64,16 @@ user_journey:
       inserts_after: results
       status: v1.1
 
+    - id: cib_scoring
+      label: "Replace mismatch scorer with weighted CIB tension scoring"
+      replaces: scoring
+      status: v1.1
+
+    - id: succession_visual
+      label: "Directed graph of thinker succession paths with citations"
+      new_page: /succession
+      status: v1.1
+
 # ─── BUSINESS LOGIC ──────────────────────────────────────────────────────────
 business_logic:
   ontology_files:
@@ -93,6 +106,18 @@ business_logic:
       output: "Detected contradictory premise pairs → recommended thinker"
       status: v1.1
 
+    - name: CIBScoring
+      input: "PositionProfile + cross-impact-matrix.json"
+      output: "coherenceScore (float), tensionScore per thinker (float), gaps[]"
+      replaces: "Scoring (mismatch count)"
+      status: v1.1
+
+    - name: MatrixPopulation
+      input: "cross-impact-matrix.json schema + research agent"
+      output: "Tier 1+2 matrix entries with scholarly citations and confidence scores"
+      notes: "Research agent task — parallel to code implementation"
+      status: v1.1
+
 # ─── ARCHITECTURE ─────────────────────────────────────────────────────────────
 architecture:
   stack:
@@ -108,10 +133,12 @@ architecture:
         description: "Quiz elicitation flow"
       - path: /results
         file: app/results/page.tsx
-        description: "Ranked thinker cards"
+        description: "Server wrapper — imports thinkers ontology, renders ResultsClient"
+        client_component: app/results/results-client.tsx
       - path: /dialogue/[thinkerId]
         file: app/dialogue/[thinkerId]/page.tsx
-        description: "Multi-turn Socratic dialogue"
+        description: "Server wrapper — resolves thinker from ontology, renders DialogueClient"
+        client_component: app/dialogue/[thinkerId]/dialogue-client.tsx
     api:
       - path: /api/dialogue
         file: app/api/dialogue/route.ts
